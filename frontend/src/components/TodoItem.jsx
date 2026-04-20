@@ -20,41 +20,64 @@ function TodoItem({ todo, updateTodo, deleteTodo }) {
   }
 
   return (
-    <li className="todo-item flex items-center p-4 bg-gray-50 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200">
-      <input
-        type="checkbox"
-        checked={todo.completed}
-        onChange={handleToggle}
-        className="mr-4 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-      />
-      {isEditing ? (
-        <input
-          type="text"
-          value={editText}
-          onChange={(e) => setEditText(e.target.value)}
-          onBlur={handleEdit}
-          onKeyPress={(e) => e.key === 'Enter' && handleEdit()}
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          autoFocus
-        />
-      ) : (
-        <span
-          className={`flex-1 cursor-pointer ${todo.completed ? 'line-through text-gray-500' : 'text-gray-800'} transition-colors duration-200`}
-          onDoubleClick={() => setIsEditing(true)}
-        >
-          {todo.text}
-        </span>
-      )}
-      <div className="flex space-x-2 ml-4">
+    <li className={`todo-item group flex flex-col gap-4 rounded-[1.5rem] border p-4 shadow-[0_14px_30px_rgba(15,23,42,0.08)] transition duration-300 sm:flex-row sm:items-center ${
+      todo.completed
+        ? 'border-emerald-200 bg-emerald-50/80'
+        : 'border-white/70 bg-white/90'
+    }`}>
+      <button
+        type="button"
+        onClick={handleToggle}
+        className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border transition duration-200 ${
+          todo.completed
+            ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_10px_20px_rgba(16,185,129,0.25)]'
+            : 'border-slate-300 bg-slate-50 text-slate-400 hover:border-orange-400 hover:text-orange-500'
+        }`}
+      >
+        <span className="text-lg font-bold">{todo.completed ? '✓' : '○'}</span>
+      </button>
+      <div className="min-w-0 flex-1">
+        <div className="mb-2 flex items-center gap-2">
+          <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
+            todo.completed
+              ? 'bg-emerald-100 text-emerald-700'
+              : 'bg-orange-100 text-orange-700'
+          }`}>
+            {todo.completed ? 'Completed' : 'Active'}
+          </span>
+        </div>
+        {isEditing ? (
+          <input
+            type="text"
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            onBlur={handleEdit}
+            onKeyDown={(e) => e.key === 'Enter' && handleEdit()}
+            className="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none ring-0 transition focus:border-orange-400"
+            autoFocus
+          />
+        ) : (
+          <button
+            type="button"
+            className={`block text-left text-lg font-semibold tracking-tight transition ${
+              todo.completed ? 'text-slate-500 line-through' : 'text-slate-900'
+            }`}
+            onDoubleClick={() => setIsEditing(true)}
+          >
+            {todo.text}
+          </button>
+        )}
+      </div>
+      <div className="flex gap-2 sm:ml-4">
         <button
           onClick={handleEdit}
-          className="px-3 py-1 text-sm bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors duration-200"
+          className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-900 hover:text-slate-900"
         >
           {isEditing ? 'Save' : 'Edit'}
         </button>
         <button
           onClick={handleDelete}
-          className="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-200"
+          className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-rose-600"
         >
           Delete
         </button>
